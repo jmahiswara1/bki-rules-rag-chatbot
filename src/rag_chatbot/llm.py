@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import time
 
 import requests
 
@@ -399,15 +400,45 @@ class OllamaClient:
         self.timeout_seconds = timeout_seconds
 
     def generate(self, prompt: str) -> str:
-        response = requests.post(
-            f"{self.base_url}/api/generate",
-            json={
-                "model": self.model,
-                "prompt": prompt,
-                "stream": False,
-            },
-            timeout=self.timeout_seconds,
-        )
-        response.raise_for_status()
-        payload = response.json()
-        return payload["response"].strip()
+        last_error: Exception | None = None
+
+        for attempt in range(2):
+            try:
+                response = requests.post(
+                    f"{self.base_url}/api/generate",
+                    json={
+                        "model": self.model,
+                        "prompt": prompt,
+                        "stream": False,
+                    },
+                    timeout=self.timeout_seconds,
+                )
+                response.raise_for_status()
+                payload = response.json()
+                return payload["response"].strip()
+            except requests.HTTPError as error:
+                status_code = error.response.status_code if error.response is not None else None
+                response_text = ""
+                if error.response is not None:
+                    response_text = (error.response.text or "").strip()[:300]
+
+                if status_code and status_code >= 500 and attempt == 0:
+                    time.sleep(0.8)
+                    last_error = error
+                    continue
+
+                detail = f"Ollama HTTP {status_code}"
+                if response_text:
+                    detail += f": {response_text}"
+                raise RuntimeError(detail) from error
+            except requests.RequestException as error:
+                if attempt == 0:
+                    time.sleep(0.8)
+                    last_error = error
+                    continue
+                raise RuntimeError(f"Failed to call Ollama API: {error}") from error
+
+        if last_error is not None:
+            raise RuntimeError(f"Failed to call Ollama API: {last_error}") from last_error
+
+        raise RuntimeError("Failed to call Ollama API for unknown reason")

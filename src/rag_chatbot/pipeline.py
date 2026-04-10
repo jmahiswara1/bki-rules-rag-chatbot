@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -58,6 +59,20 @@ def _append_trace(settings: Settings, payload: dict) -> None:
     line = json.dumps(payload, ensure_ascii=False)
     with settings.trace_output_path.open("a", encoding="utf-8") as handle:
         handle.write(line + "\n")
+
+
+def _safe_generate(llm: OllamaClient, prompt: str, context: str) -> str:
+    try:
+        return llm.generate(prompt)
+    except RuntimeError:
+        compact_context = context[: max(900, len(context) // 2)]
+        compact_prompt = re.sub(
+            r"Konteks:\n.*?\n\nPertanyaan:\n",
+            f"Konteks:\n{compact_context}\n\nPertanyaan:\n",
+            prompt,
+            flags=re.DOTALL,
+        )
+        return llm.generate(compact_prompt)
 
 
 def _evaluate_expected_terms(answer: str, must_have_terms: list[str]) -> dict:
@@ -293,7 +308,7 @@ def answer_question_with_clients(
         context,
         extractive_mode=extractive_mode,
     )
-    answer = llm.generate(prompt)
+    answer = _safe_generate(llm, prompt, context)
 
     if settings.conservative_mode:
         is_supported = validate_answer_support(
@@ -316,7 +331,7 @@ def answer_question_with_clients(
             context,
             extractive_mode=extractive_mode,
         )
-        recovered_answer = llm.generate(recovery_prompt)
+        recovered_answer = _safe_generate(llm, recovery_prompt, context)
         if recovered_answer and recovered_answer.strip().lower() != "informasi tidak ditemukan di dokumen.":
             if not settings.conservative_mode:
                 answer = recovered_answer
