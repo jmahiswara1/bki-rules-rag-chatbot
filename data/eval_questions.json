@@ -1,0 +1,100 @@
+[
+  {
+    "id": "q01_topic_main",
+    "category": "global_info",
+    "question": "Apa topik utama dokumen ini?",
+    "expected_answer": "Dokumen ini berisi peraturan klasifikasi dan konstruksi lambung kapal baja samudera (Rules for Hull) edisi Januari 2026 yang diterbitkan oleh Biro Klasifikasi Indonesia (BKI).",
+    "must_have_terms": ["Rules for Hull", "January 2026", "Biro Klasifikasi Indonesia"]
+  },
+  {
+    "id": "q02_master_loading_manual",
+    "category": "global_info",
+    "question": "Apa kewajiban utama yang disebutkan di bagian awal dokumen mengenai nakhoda kapal baru?",
+    "expected_answer": "Nakhoda setiap kapal baru harus dibekali dengan informasi (loading manual/instrument) untuk mengatur pemuatan dan penyeimbangan kapal sedemikian rupa guna menghindari tegangan yang tidak dapat diterima pada struktur kapal.",
+    "must_have_terms": ["master", "loading manual", "stresses"]
+  },
+  {
+    "id": "q03_rule_length_azimuth",
+    "category": "conditional_rule",
+    "question": "Bagaimana aturan mendefinisikan panjang kapal (L) untuk kapal yang tidak memiliki poros kemudi (seperti yang dilengkapi dengan azimuth thrusters)?",
+    "expected_answer": "Untuk kapal tanpa poros kemudi, panjang aturan (L) diambil sebesar 97% dari panjang ekstrem pada garis air muat desain (scantling draught).",
+    "must_have_terms": ["97%", "waterline", "scantling draught"]
+  },
+  {
+    "id": "q04_reh_normal_strength",
+    "category": "numeric_fact",
+    "question": "Berapa batas minimum tegangan luluh nominal (ReH) untuk baja struktur lambung dengan kekuatan normal?",
+    "expected_answer": "Baja struktur lambung kekuatan normal memiliki batas minimum tegangan luluh nominal (ReH) sebesar 235 N/mm².",
+    "must_have_terms": ["235", "N/mm2", "ReH"]
+  },
+  {
+    "id": "q05_sill_with_above_access",
+    "category": "conditional_rule",
+    "question": "Jika akses disediakan dari dek di atas sebagai alternatif akses dari freeboard deck, berapa tinggi ambang pintu (sill height) minimum pada bridge atau poop?",
+    "expected_answer": "Tinggi ambang pintu akses pada sekat ujung superstruktur tertutup setidaknya harus 380 mm di atas dek.",
+    "must_have_terms": ["380", "bridge", "poop"]
+  },
+  {
+    "id": "q06_sill_without_above_access",
+    "category": "conditional_rule",
+    "question": "Jika tidak ada akses dari atas (deck above) pada companionway ke ruang di bawah dek, berapa tinggi ambang pintu (sill height) minimum yang disyaratkan?",
+    "expected_answer": "Tinggi ambang pintu minimum adalah 600 mm.",
+    "must_have_terms": ["600", "companionway"]
+  },
+  {
+    "id": "q07_probability_factor",
+    "category": "numeric_fact",
+    "question": "Berapa nilai faktor probabilitas (f) yang digunakan untuk perhitungan beban laut luar pada pelat kulit lambung dan dek cuaca?",
+    "expected_answer": "Nilai faktor probabilitas (f) untuk pelat kulit lambung dan dek cuaca adalah 1,0.",
+    "must_have_terms": ["f", "1,0", "outer hull", "weather decks"]
+  },
+  {
+    "id": "q08_dredger_bottom_thickness",
+    "category": "conditional_rule",
+    "question": "Untuk kapal pengeruk (dredgers) yang diharapkan beroperasi saat menyentuh dasar laut (aground), berapa persen peningkatan ketebalan pelat kulit dasar yang diwajibkan?",
+    "expected_answer": "Ketebalan pelat kulit dasar harus ditingkatkan sebesar 20% di atas nilai yang disyaratkan dalam Seksi 6.",
+    "must_have_terms": ["20%", "dredgers", "Section 6"]
+  },
+  {
+    "id": "q09_nmax_fatigue",
+    "category": "numeric_fact",
+    "question": "Berapa jumlah siklus beban (n_max) yang harus diasumsikan dalam perhitungan kekuatan lelah (fatigue strength) akibat stres laut untuk desain umur kapal selama 20 tahun?",
+    "expected_answer": "Untuk umur desain sekitar 20 tahun, jumlah siklus beban (n_max) yang diasumsikan adalah 5 x 10^7 siklus.",
+    "must_have_terms": ["nmax", "5", "10^7", "20 years"]
+  },
+  {
+    "id": "q10_towing_winch_drum",
+    "category": "numeric_fact",
+    "question": "Berapa diameter minimum drum derek penghela (towing winch) jika dibandingkan dengan diameter tali penghela?",
+    "expected_answer": "Diameter drum derek penghela tidak boleh kurang dari 14 kali diameter tali penghela.",
+    "must_have_terms": ["14", "towrope", "diameter"]
+  },
+  {
+    "id": "q11_side_scuttles_material",
+    "category": "conditional_rule",
+    "question": "Apa syarat material untuk jendela atau jendela sisi (side scuttles)?",
+    "expected_answer": "Kaca jendela harus terbuat dari kaca pengaman yang dikeraskan secara termal (TSG) atau kaca pengaman berlapis, dan bagian bingkainya tidak boleh menggunakan bahan non-logam.",
+    "must_have_terms": ["TSG", "laminated", "non-metal"]
+  },
+  {
+    "id": "q12_topic_paraphrase_en",
+    "category": "global_info",
+    "question": "What is the main subject of this document?",
+    "expected_answer": "The document contains Rules for Hull (Part 1 Seagoing Ships Volume II), January 2026 Edition, published by Biro Klasifikasi Indonesia.",
+    "must_have_terms": ["Rules for Hull", "January 2026", "Biro Klasifikasi Indonesia"]
+  },
+  {
+    "id": "q13_master_paraphrase_en",
+    "category": "global_info",
+    "question": "What information must be supplied to the master of every new ship regarding loading?",
+    "expected_answer": "The master of every new ship must be supplied with loading/ballasting information or loading manual/instrument to avoid unacceptable stresses in the ship structure.",
+    "must_have_terms": ["master", "loading", "stresses"]
+  },
+  {
+    "id": "q14_prob_factor_paraphrase_en",
+    "category": "numeric_fact",
+    "question": "For outer hull shell plating and weather decks, what is the probability factor f value?",
+    "expected_answer": "The probability factor f is 1.0.",
+    "must_have_terms": ["f", "1.0", "outer hull", "weather decks"]
+  }
+]

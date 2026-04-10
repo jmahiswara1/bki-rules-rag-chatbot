@@ -1,0 +1,11 @@
+[
+  {
+    "question": "Apa topik utama dokumen ini?",
+    "expected_answer": "Isi dengan jawaban referensi dari dokumenmu sendiri."
+  },
+  {
+    "question": "Apa kewajiban utama yang disebutkan di bagian awal dokumen?",
+    "expected_answer": "Isi dengan jawaban referensi yang relevan."
+  }
+]
+

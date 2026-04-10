@@ -1,0 +1,14 @@
+[
+  {
+    "question": "Berapa tinggi ambang pintu (sill height) minimum untuk pintu masuk pada rumah geladak (deckhouse) di geladak lambung bebas jika tidak ada akses dari atas?",
+    "expected_answer": "Tinggi ambang pintu masuk pada rumah geladak di geladak lambung bebas setidaknya harus 600 mm jika akses tidak disediakan dari atas."
+  },
+  {
+    "question": "Untuk kapal dengan panjang (L) kurang dari 90 meter, bagaimana cara menentukan ketebalan minimum pelat kulit dasar (bottom shell plating)?",
+    "expected_answer": "Untuk kapal dengan L < 50 m, ketebalan minimum adalah (1,5 - 0,01 * L) * sqrt(L * k). Untuk kapal dengan L >= 50 m, ketebalan minimum adalah sqrt(L * k)."
+  },
+  {
+    "question": "Apa syarat khusus untuk pengelasan pelat kulit kapal di area sekitar baling-baling (propeller) jika putaran baling-baling melebihi 300 rpm?",
+    "expected_answer": "Jika putaran baling-baling melebihi sekitar 300 rpm, terutama pada dasar kapal yang datar, harus dipasang gading-gading pendek antar gading (intercostal carlings) di atas atau di depan baling-baling untuk mengurangi ukuran panel pelat dasar."
+  }
+]
