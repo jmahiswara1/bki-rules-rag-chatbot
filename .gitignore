@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 venv/
 *.pyc
+*.egg-info/
 data/chroma/
 data/raw/
 data/processed/

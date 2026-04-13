@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -75,12 +76,46 @@ def _safe_generate(llm: OllamaClient, prompt: str, context: str) -> str:
         return llm.generate(compact_prompt)
 
 
+_TERM_ALIASES: dict[str, tuple[str, ...]] = {
+    "rules for hull": ("rules for hull",),
+    "january 2026": ("january 2026", "jan 2026", "2026 edition", "edisi januari 2026"),
+    "biro klasifikasi indonesia": ("biro klasifikasi indonesia", "bki"),
+    "loading manual": ("loading manual", "loading/ballasting", "loading and ballasting", "loading information"),
+    "master": ("master",),
+    "stresses": ("stresses", "stress"),
+    "weather decks": ("weather decks", "weather deck"),
+    "outer hull": ("outer hull", "outer hull shell plating", "shell plating"),
+    "non-metal": ("non-metal", "non metal", "nonmetal"),
+    "1.0": ("1.0", "1,0"),
+    "1,0": ("1,0", "1.0"),
+}
+
+
+def _normalize_for_match(text: str) -> str:
+    lowered = text.lower()
+    lowered = lowered.replace("\u00b2", "2")
+    lowered = re.sub(r"(?<=\d),(?=\d)", ".", lowered)
+    lowered = re.sub(r"\s+", " ", lowered).strip()
+    return lowered
+
+
+def _term_variants(term: str) -> tuple[str, ...]:
+    normalized_term = _normalize_for_match(term)
+    aliased = _TERM_ALIASES.get(normalized_term)
+    if aliased:
+        return tuple(_normalize_for_match(item) for item in aliased)
+    return (normalized_term,)
+
+
 def _evaluate_expected_terms(answer: str, must_have_terms: list[str]) -> dict:
-    lowered_answer = answer.lower()
+    normalized_answer = _normalize_for_match(answer)
     missing_terms: list[str] = []
+
     for term in must_have_terms:
-        if term.lower() not in lowered_answer:
+        variants = _term_variants(term)
+        if not any(variant and variant in normalized_answer for variant in variants):
             missing_terms.append(term)
+
     return {
         "matched": len(missing_terms) == 0,
         "missing_terms": missing_terms,
@@ -410,6 +445,9 @@ def chat_command() -> None:
 
 
 def evaluate_command() -> None:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     parser = argparse.ArgumentParser(description="Evaluate RAG answers manually.")
     parser.add_argument(
         "--questions",

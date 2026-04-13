@@ -67,7 +67,7 @@ Copy-Item .env.example .env
 5. Siapkan Ollama dan pull model sesuai isi `.env`, contoh:
 
 ```powershell
-ollama pull llama3.2
+ollama pull qwen2.5:7b
 ```
 
 6. Salin PDF kamu ke folder `data/raw/`, misalnya `data/raw/dokumen.pdf`.
@@ -80,9 +80,9 @@ Jika ingin setting lewat file, salin `.env.example` menjadi `.env` lalu ubah nil
 
 ```dotenv
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.2
-EMBEDDING_MODEL=intfloat/multilingual-e5-base
-CHROMA_COLLECTION=pdf_chunks_e5
+OLLAMA_MODEL=qwen2.5:7b
+EMBEDDING_MODEL=intfloat/multilingual-e5-large
+CHROMA_COLLECTION=pdf_chunks_e5_large
 CHUNK_SIZE=1200
 CHUNK_OVERLAP=200
 TOP_K=8
@@ -97,6 +97,9 @@ CONSERVATIVE_MODE=1
 MIN_QUOTE_TOKEN_OVERLAP=0.30
 # Optional: untuk rate limit HF lebih longgar
 # HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxxx
+# Optional: reranker untuk menaikkan akurasi retrieval (latensi naik)
+# USE_CROSS_ENCODER_RERANKER=1
+# RERANKER_MODEL=BAAI/bge-reranker-v2-m3
 ```
 
 Keterangan penting:
@@ -109,8 +112,8 @@ Opsional jika ingin set env langsung dari PowerShell (tanpa `.env`):
 
 ```powershell
 $env:OLLAMA_BASE_URL="http://localhost:11434"
-$env:OLLAMA_MODEL="llama3.2"
-$env:EMBEDDING_MODEL="intfloat/multilingual-e5-base"
+$env:OLLAMA_MODEL="qwen2.5:7b"
+$env:EMBEDDING_MODEL="intfloat/multilingual-e5-large"
 ```
 
 ## Cara Menjalankan
@@ -322,7 +325,16 @@ Opsional untuk mengurangi limit download:
 - isi `HF_TOKEN` di `.env`, atau
 - set env langsung di terminal.
 
-### 2. Ingin re-ingest dari nol
+### 2. Error dimensi embedding (768 vs 1024)
+
+Jika kamu ganti embedding model dari `multilingual-e5-base` (768) ke
+`multilingual-e5-large` (1024), collection lama tidak bisa dipakai ulang.
+
+Pilihan solusi:
+- Ganti `CHROMA_COLLECTION` ke nama baru, contoh `pdf_chunks_e5_large`.
+- Atau hapus index lama lalu ingest ulang dari nol.
+
+### 3. Ingin re-ingest dari nol
 
 Jika ingin menghapus index lama dan membangun ulang vector store:
 
@@ -331,7 +343,7 @@ Remove-Item -Recurse -Force data\chroma
 py -3.12 ingest.py --pdf data/raw/dokumen.pdf
 ```
 
-### 3. Ganti model Ollama tapi gagal generate
+### 4. Ganti model Ollama tapi gagal generate
 
 Pastikan model sudah tersedia di local Ollama:
 
